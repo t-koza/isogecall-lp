@@ -1,125 +1,126 @@
-# イソゲコール LP
+# イソゲコール LP（公式サイト）
 
-賃貸仲介会社向けサービス「イソゲコール」のランディングページ。
-HTML / CSS / Vanilla JS のみで構成された静的サイトで、GitHub Pages にそのままデプロイできます。
+賃貸仲介会社向けサービス「イソゲコール」（運営：株式会社よもやま）の公式ランディングページ。
+HTML / CSS / Vanilla JS だけの静的サイトで、**GitHubに保存すると自動で公開**されます（GitHub Pages）。
+
+- 公開URL（独自ドメイン）: **https://isogecall.com/**
+- 予備URL（GitHub Pages）: https://t-koza.github.io/isogecall-lp/
+
+---
+
+## 🟢 文章・料金を直したいとき（ノーコード／GitHubの画面だけで完結）
+
+専門知識は不要です。GitHubのWeb画面で文字を書き換えて保存するだけで、数分後にサイトへ反映されます。
+
+### 手順
+1. ブラウザで **https://github.com/t-koza/isogecall-lp** を開く
+2. 直したいファイルをクリック（文章のほとんどは **`index.html`**）
+3. 右上の **鉛筆マーク（✏️ Edit）** をクリック
+4. 文字を書き換える（後述の「どこを直す？」を参照）
+5. 右上の緑ボタン **「Commit changes」** を押す → そのまま保存
+6. **1〜3分待つ** と https://isogecall.com/ に反映されます（反映されないときはブラウザを更新）
+
+> 💡 不安なときは、まず小さな1文字だけ変えて「反映される感覚」を試すのがおすすめです。元に戻したいときは、同じ手順で戻すか、編集画面の履歴から復元できます。
+
+### どこを直す？（`index.html` 内の目印コメントで探せます）
+ファイル内を「`▼▼`」で検索すると、編集ポイントにすぐ飛べます。
+
+| 直したいもの | 探す目印（コメント） | 補足 |
+| --- | --- | --- |
+| Google検索に出るタイトル・説明文 | `▼▼ SEO / タイトル・説明文` | `<title>` と `description` |
+| 料金（金額・プラン内容） | `▼▼ 料金を変えるときはこのセクション` | `30,000` などの数字を書き換え |
+| よくある質問（Q&A） | `▼▼ Q&Aを増減するときはこのセクション` | `<details>` を増やせばQ&A追加 |
+| 電話番号 | `03-6689-0472` を検索 | 3か所あります（全て直す） |
+| メールアドレス | `admin@isogecall.com` を検索 | |
+| キャッチコピー（一番上の大見出し） | `1. ファーストビュー` | `<h1>` の中 |
+| 実績の数字（58% / 41% など） | `信頼バー` や `実績` | 数字を書き換え |
+| 導入事例 | `6. 導入事例` | |
+
+> ⚠️ 電話番号の `tel:0366890472`（リンク用）は、ハイフン無し・市外局番ありで書きます。
+
+---
+
+## 📨 お問い合わせフォームの通知先（Slack）
+
+フォーム送信は **Slack の Incoming Webhook** に直接届きます（指定チャンネルに通知）。
+
+- 通知先を変えるとき: `index.html` 内の `SLACK_WEBHOOK_URL =` の行のURLを差し替え
+- セキュリティ上の注意: Webhook URL はサイトのソースから見えます。万一悪用されたら Slack 側で **Revoke → 新規発行 → 差し替え** で即無効化できます（簡易的なbot対策のhoneypotは実装済み）
+- 送信内容: 会社名・お名前・メール・電話・種別・本文 が整形されて届きます
+
+---
+
+## 🖼 OGP画像（SNSシェア時のサムネ）の作り直し方
+
+`assets/ogp.png`（1200×630）がSNS・検索時のサムネです。元データは `assets/og-card.html`。
+文言を変えたら、ターミナルで以下を実行すると作り直せます（macOS / Chrome利用）。
+
+```bash
+cd assets
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+  --headless=new --disable-gpu --window-size=1200,630 \
+  --screenshot="$(pwd)/ogp.png" "file://$(pwd)/og-card.html"
+```
+
+---
+
+## 🎨 色を変えたいとき
+
+`style.css` の先頭 `:root` を変えると全体に反映されます。
+
+| 役割 | 変数 | 値 |
+| --- | --- | --- |
+| ブランド主色（ティール） | `--teal` | `#1f867a` |
+| 濃いティール（ダーク背景） | `--teal-d` | `#14463f` |
+| CTA・即時性アクセント（オレンジ） | `--orange` | `#f1851f` |
+| 文字色（ネイビー） | `--ink` | `#15293b` |
+| 温かみ背景（クリーム） | `--cream` | `#f8f5ec` |
+
+---
 
 ## ファイル構成
 
 ```
 isogecall-lp/
-├── index.html      … LP本体（10セクション構成）
-├── style.css       … デザイン・レスポンシブ
-├── README.md       … このファイル
+├── index.html        … LP本体（文章はほぼここ）
+├── style.css         … デザイン・色・レスポンシブ
+├── robots.txt        … 検索エンジン向け設定
+├── sitemap.xml       … 検索エンジンへのページ一覧
+├── CNAME             … 独自ドメイン設定（isogecall.com）
+├── README.md         … このファイル
 └── assets/
-    ├── favicon.svg
-    ├── hero-dark.png        … 任意（OGP用に流用可）
-    └── lp-reference.png     … OGP画像
+    ├── logo-round.png … ロゴ
+    ├── favicon.svg    … ブラウザタブのアイコン
+    ├── ogp.png        … SNSシェア用サムネ（1200×630）
+    └── og-card.html   … ogp.png の元データ
 ```
 
-- 外部フレームワーク不要（Noto Sans JP のみ Google Fonts から読み込み）
-- スマホ閲覧優先（390px〜）。PC・タブレットでもレスポンシブ対応
-- 画像が無くても CSS グラデーション・アイコンで成立するように構成
+---
+
+## 🌐 独自ドメイン（isogecall.com）の仕組み・メモ
+
+- `CNAME` ファイルに `isogecall.com` を記載済み（GitHub Pages 側の独自ドメイン設定）
+- DNS は **Cloudflare** で管理。GitHub Pages へ向けるための推奨レコード:
+
+| Type | Name | Content | Proxy |
+| --- | --- | --- | --- |
+| A | @ | 185.199.108.153 | DNSのみ（グレー雲） |
+| A | @ | 185.199.109.153 | DNSのみ |
+| A | @ | 185.199.110.153 | DNSのみ |
+| A | @ | 185.199.111.153 | DNSのみ |
+| CNAME | www | t-koza.github.io | DNSのみ |
+
+- 設定後、GitHubの **Settings → Pages → Custom domain** が `isogecall.com` になり、`Enforce HTTPS` にチェックが入れば完了
+- 反映には DNS浸透で最大数十分かかることがあります
+
+---
 
 ## ローカルでの確認
 
-`index.html` をブラウザで直接開くだけで確認できます。
-
 ```bash
-open index.html
-# もしくは簡易サーバー
-python3 -m http.server 8000
-# → http://localhost:8000
+python3 -m http.server 5173
+# → http://localhost:5173
 ```
-
-## GitHub Pages での公開手順
-
-1. GitHub で新規リポジトリを作成（例: `isogecall-lp`）
-2. このフォルダの中身をすべてアップロード（または `git push`）
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit: isogecall LP"
-   git branch -M main
-   git remote add origin https://github.com/<your-account>/isogecall-lp.git
-   git push -u origin main
-   ```
-3. GitHub のリポジトリページで **Settings → Pages** を開く
-4. **Source** を `Deploy from a branch` にする
-5. **Branch** を `main` / `/ (root)` に設定して **Save**
-6. 数分後に `https://<your-account>.github.io/isogecall-lp/` で公開されます
-
-## カスタマイズ
-
-### お問い合わせフォーム → Slack 連携
-
-LP最下部のフォーム送信は **Slack Incoming Webhook** に直接POSTされ、指定チャネル（`C0B38MHCJ6M`）に通知されます。
-
-#### Webhook URL の差し替え
-
-`index.html` 内の以下を、実運用の Webhook URL に書き換えてください。
-
-```js
-var SLACK_WEBHOOK_URL = "https://hooks.slack.com/services/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";
-```
-
-#### Slack側の設定手順（再発行や別チャネルに変更する場合）
-
-1. https://api.slack.com/apps へアクセスし、対象アプリを開く（無ければ「Create New App → From scratch」）
-2. **Incoming Webhooks** を有効化
-3. **Add New Webhook to Workspace** をクリック
-4. 投稿先チャネル（例: `#xxx`、内部ID `C0B38MHCJ6M`）を選択して許可
-5. 発行された `https://hooks.slack.com/services/...` を `index.html` の `SLACK_WEBHOOK_URL` に貼り付け
-
-#### セキュリティ上の注意
-
-- Webhook URL は静的サイトに埋め込まれるため、**ブラウザのソースで閲覧可能**です
-- 万一スパムや悪用があった場合は、Slack 側で当該 Webhook を **Revoke → 新規発行 → 差し替え** すれば即座に無効化できます
-- 将来的に Cloudflare Workers / Vercel Functions などの**サーバーレス Proxy 経由**にすると、URL をクライアントに露出せず安全になります
-- 本実装には簡易的な honeypot フィールドを含めており、単純な bot 送信は弾けます
-
-#### 送信メッセージの見え方（Slack側）
-
-```
-🆕 LPから新しいお問い合わせ
-─────────────────
-会社名:        株式会社○○
-お名前:        山田 太郎
-メール:        taro@example.co.jp
-電話番号:      03-0000-0000
-お問い合わせ種別: 資料請求
-─────────────────
-お問い合わせ内容:
-○○について詳しく知りたいです。
-
-🌐 送信元: https://xxx.github.io/isogecall-lp/  ／ 🕒 2026/05/19 14:30:00
-```
-
-### 料金
-`index.html` の「料金プラン」セクション（`#price`）の以下を編集してください。
-
-- 初期費用 `50,000円〜`
-- 月額費用 `10,000円〜`
-- 含まれる内容（3項目）
-
-### お客様の声
-`#voice` セクションの A社 / B社 部分を、実際の導入企業のコメントに差し替えてください。
-
-### OGP画像
-`assets/lp-reference.png` を差し替えると、SNS共有時のサムネが切り替わります。
-`index.html` 内の `og:image` のパスも必要に応じて変更してください。
-
-## カラー
-
-ダーク（黒〜濃紺）×ネオン（シアン / グリーン / ブルー）のBtoB SaaSテイスト。
-カラーは `style.css` 冒頭の `:root` で一括変更できます。
-
-| 役割 | 変数 | 値 |
-| --- | --- | --- |
-| 背景 | `--bg` | `#020b14` |
-| アクセント（シアン） | `--aqua` | `#18e0c2` |
-| アクセント（ブルー） | `--blue` | `#1c8dff` |
-| アクセント（グリーン） | `--green` | `#3ef58a` |
 
 ## ライセンス
-
 社内利用向け。デザイン・コピーの転用はご相談ください。
