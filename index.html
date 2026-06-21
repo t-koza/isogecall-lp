@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="ja">
 <head>
+  <script>document.documentElement.className += " js";</script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#14463f" />
@@ -88,6 +89,7 @@
   </script>
 </head>
 <body>
+  <a class="skip-link" href="#top">本文へスキップ</a>
   <!-- ============================================================
        ヘッダー（ロゴ・メニュー）
        ============================================================ -->
@@ -620,6 +622,37 @@
           btn.textContent = originalText;
         }
       });
+    })();
+
+    // スクロール演出（セクションが画面に入ったらフェードイン）
+    (function(){
+      var els = [].slice.call(document.querySelectorAll('.section:not(.hero)'));
+      if(!els.length) return;
+      if(!('IntersectionObserver' in window)){ els.forEach(function(e){ e.classList.add('in'); }); return; }
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+      }, { rootMargin:'0px 0px -8% 0px', threshold:0.05 });
+      els.forEach(function(e){ io.observe(e); });
+      // 安全策：3秒後に未表示が残っていたら必ず表示
+      setTimeout(function(){ els.forEach(function(e){ e.classList.add('in'); }); }, 3000);
+    })();
+
+    // 現在地に応じてナビをハイライト
+    (function(){
+      var links = [].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+      var map = {};
+      links.forEach(function(a){ var id=a.getAttribute('href').slice(1); if(id) map[id]=a; });
+      var ids = Object.keys(map);
+      if(!ids.length || !('IntersectionObserver' in window)) return;
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if(en.isIntersecting){
+            links.forEach(function(a){ a.classList.remove('active'); });
+            if(map[en.target.id]) map[en.target.id].classList.add('active');
+          }
+        });
+      }, { rootMargin:'-45% 0px -50% 0px', threshold:0 });
+      ids.forEach(function(id){ var el=document.getElementById(id); if(el) io.observe(el); });
     })();
   </script>
 </body>

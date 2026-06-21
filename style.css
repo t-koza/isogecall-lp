@@ -339,7 +339,23 @@ h1,h2,h3{ line-height:1.35; margin:0; font-weight:900; letter-spacing:.01em; }
   .sb-step{ width:48px; font-size:.7rem; }
 }
 
+/* ---------- 仕上げ：アンカー位置補正・スキップリンク・アクティブナビ・スクロール演出 ---------- */
+/* ヘッダー追従分、見出しが隠れないようにアンカー位置をずらす */
+section[id]{ scroll-margin-top:84px; }
+
+/* キーボード操作用スキップリンク */
+.skip-link{ position:absolute; left:-9999px; top:0; z-index:100; background:var(--ink); color:#fff; padding:.6em 1em; border-radius:0 0 10px 0; font-weight:700; }
+.skip-link:focus{ left:0; }
+
+/* 現在地のナビをハイライト */
+.nav a.active{ color:var(--teal); }
+
+/* スクロール演出（JS有効時のみ。JS無効・動き低減設定では常に表示） */
+.js .section:not(.hero){ opacity:0; transform:translateY(22px); transition:opacity .7s ease, transform .7s ease; will-change:opacity,transform; }
+.js .section.in{ opacity:1; transform:none; }
+
 /* アニメ抑制設定の尊重 */
 @media (prefers-reduced-motion:reduce){
-  *{ scroll-behavior:auto !important; transition:none !important; }
+  *{ scroll-behavior:auto !important; transition:none !important; animation:none !important; }
+  .js .section:not(.hero){ opacity:1 !important; transform:none !important; }
 }
